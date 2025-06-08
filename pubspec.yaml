@@ -1,0 +1,38 @@
+name: flutter_application_1
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  curved_navigation_bar: ^1.0.6
+  fl_chart: ^1.0.0
+  flutter:
+    sdk: flutter
+  flutter_otp_text_field: ^1.5.1+1
+  flutter_speed_dial: ^7.0.0
+  get: ^4.7.2
+  http: ^1.4.0
+  intl: ^0.20.2
+  mongo_dart: ^0.10.5
+  path: ^1.9.1
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets\fonts\Poppins-Regular.ttf
+  assets:
+    - assets/images/caution_icon.png
+    - assets/images/el_wiwi.jpeg
+    - assets/images/google_icon.png
+    - assets/images/check.gif
