@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
   final url = "http://localhost:5000";
@@ -112,6 +113,42 @@ class AuthServices {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return {'success': true, 'message': data['msg']};
+      } else {
+        final data = jsonDecode(response.body);
+        return {'success': false, 'message': data['msg']};
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'error : $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> googleSignIn() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        return {'success': false, 'message': 'Google sign-in cancelled'};
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final response = await http.post(
+        Uri.parse('$url/google-signin'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'id_token': googleAuth.idToken,
+          'access_token': googleAuth.accessToken,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return {
+          'success': true,
+          'access_token': data['access_token'],
+          'username': data['username'],
+        };
       } else {
         final data = jsonDecode(response.body);
         return {'success': false, 'message': data['msg']};

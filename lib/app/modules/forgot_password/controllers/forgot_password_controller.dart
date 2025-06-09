@@ -29,7 +29,11 @@ class ForgotPasswordController extends GetxController {
           arguments: {"email": emailController.text, "register": false},
         );
       } else if (response['success'] == false) {
-        Get.snackbar("Error", response["message"]);
+        Get.snackbar(
+          "Error",
+          response["message"],
+          backgroundColor: Colors.white,
+        );
       }
     }
   }

@@ -14,6 +14,7 @@ dependencies:
   flutter_otp_text_field: ^1.5.1+1
   flutter_speed_dial: ^7.0.0
   get: ^4.7.2
+  google_sign_in: ^6.3.0
   http: ^1.4.0
   intl: ^0.20.2
   mongo_dart: ^0.10.5
@@ -32,7 +33,4 @@ flutter:
       fonts:
         - asset: assets\fonts\Poppins-Regular.ttf
   assets:
-    - assets/images/caution_icon.png
-    - assets/images/el_wiwi.jpeg
-    - assets/images/google_icon.png
-    - assets/images/check.gif
+    - assets/images/

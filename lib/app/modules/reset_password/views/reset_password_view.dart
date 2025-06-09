@@ -47,6 +47,7 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Form(
+                  key: controller.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -80,21 +81,31 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
                         child: const Text("Confirmation Your New Password"),
                       ),
                       const SizedBox(height: 7.5),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          isDense: true,
-                          border: OutlineInputBorder(),
+                      Obx(
+                        () => TextFormField(
+                          obscureText: controller.obsecurePassword.value,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              onPressed: () => controller.togglePassword(),
+                              icon:
+                                  controller.obsecurePassword.value
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off),
+                            ),
+                          ),
+                          controller: controller.confPasswordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Password konfirmasi tidak boleh kosong!";
+                            } else if (controller.passwordController.text !=
+                                controller.confPasswordController.text) {
+                              return "Password dan password konfirmasi tidak cocok";
+                            }
+                            return null;
+                          },
                         ),
-                        controller: controller.confPasswordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Password konfirmasi tidak boleh kosong!";
-                          } else if (controller.passwordController.text !=
-                              controller.confPasswordController.text) {
-                            return "Password dan password konfirmasi tidak cocok";
-                          }
-                          return null;
-                        },
                       ),
 
                       const SizedBox(height: 32),
@@ -112,7 +123,7 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
                                         Colors.blue,
                                       ),
                                     ),
-                                    child: const Text("Register"),
+                                    child: const Text("Reset Password"),
                                   ),
                         ),
                       ),

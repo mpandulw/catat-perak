@@ -7,6 +7,7 @@ class ResetPasswordController extends GetxController {
   late String otp;
 
   final isLoading = false.obs;
+  final obsecurePassword = true.obs;
 
   final AuthServices _authServices = AuthServices();
 
@@ -19,9 +20,17 @@ class ResetPasswordController extends GetxController {
     super.onInit();
     email = Get.arguments['email'];
     otp = Get.arguments['otp'];
+    print(email);
+    print(otp);
+  }
+
+  void togglePassword() {
+    obsecurePassword.value = !obsecurePassword.value;
   }
 
   Future<void> resetPassword() async {
+    print(passwordController.text);
+    print(confPasswordController.text);
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
 

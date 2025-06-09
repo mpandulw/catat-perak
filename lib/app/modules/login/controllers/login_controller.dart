@@ -16,6 +16,7 @@ class LoginController extends GetxController {
 
   void togglePassword() {
     obsecurePassword.value = !obsecurePassword.value;
+    print(obsecurePassword.value);
   }
 
   Future<void> login() async {
@@ -70,5 +71,13 @@ class LoginController extends GetxController {
   Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
+  }
+
+  Future<void> googleSignIn() async {
+    final response = await _authServices.googleSignIn();
+
+    if (response['success'] == true) {
+      print(response['message']);
+    }
   }
 }
