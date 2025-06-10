@@ -182,7 +182,7 @@ class LoginView extends GetView<LoginController> {
                                 'assets/images/google_icon.png',
                               ),
                             ),
-                            onPressed: () => controller.googleSignIn(),
+                            onPressed: () => (),
                           ),
                         ),
 

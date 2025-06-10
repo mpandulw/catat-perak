@@ -16,7 +16,6 @@ class LoginController extends GetxController {
 
   void togglePassword() {
     obsecurePassword.value = !obsecurePassword.value;
-    print(obsecurePassword.value);
   }
 
   Future<void> login() async {
@@ -30,9 +29,11 @@ class LoginController extends GetxController {
 
       isLoading.value = false;
 
-      if (response['success']) {
+      if (response['success'] == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', response['access_token']);
+        prefs.setString('token', response['access_token']);
+        prefs.setString('username', response['username']);
+        prefs.setString('email', response['email']);
 
         Get.snackbar(
           'Login Berhasil',
@@ -73,11 +74,11 @@ class LoginController extends GetxController {
     return prefs.getString('token');
   }
 
-  Future<void> googleSignIn() async {
-    final response = await _authServices.googleSignIn();
+  // Future<void> googleSignIn() async {
+  //   final response = await _authServices.googleSignIn();
 
-    if (response['success'] == true) {
-      print(response['message']);
-    }
-  }
+  //   if (response['success'] == true) {
+  //     print(response['message']);
+  //   }
+  // }
 }

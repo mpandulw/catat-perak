@@ -19,6 +19,7 @@ class AuthServices {
           'success': true,
           'access_token': data['access_token'],
           'username': data['username'],
+          'email': data['email'],
         };
       } else {
         final data = jsonDecode(response.body);

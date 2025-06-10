@@ -16,7 +16,15 @@ class DetailRekeningView extends GetView<DetailRekeningController> {
         foregroundColor: Colors.white,
         actions: [
           IconButton(
-            onPressed: () => Get.toNamed('/edit-rekening'),
+            onPressed:
+                () => Get.toNamed(
+                  '/edit-rekening',
+                  arguments: {
+                    'id': controller.id,
+                    'name': controller.accountName,
+                    'balance': controller.accountBalance,
+                  },
+                ),
             icon: const Icon(Icons.edit_rounded, color: Colors.white),
           ),
         ],
@@ -35,7 +43,7 @@ class DetailRekeningView extends GetView<DetailRekeningController> {
                 // Account balance name
                 TextFormField(
                   enabled: false,
-
+                  initialValue: controller.accountName,
                   decoration: InputDecoration(
                     isDense: true,
                     border: OutlineInputBorder(
@@ -54,6 +62,7 @@ class DetailRekeningView extends GetView<DetailRekeningController> {
                 // Account balance amount
                 TextFormField(
                   enabled: false,
+                  initialValue: controller.accountBalance.toString(),
                   decoration: InputDecoration(
                     isDense: true,
                     border: OutlineInputBorder(

@@ -20,8 +20,6 @@ class ResetPasswordController extends GetxController {
     super.onInit();
     email = Get.arguments['email'];
     otp = Get.arguments['otp'];
-    print(email);
-    print(otp);
   }
 
   void togglePassword() {
@@ -29,8 +27,6 @@ class ResetPasswordController extends GetxController {
   }
 
   Future<void> resetPassword() async {
-    print(passwordController.text);
-    print(confPasswordController.text);
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
 

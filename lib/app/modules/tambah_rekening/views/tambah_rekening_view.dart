@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/app/data/models/rekening_model.dart';
 
 import 'package:get/get.dart';
 
@@ -20,14 +19,13 @@ class TambahRekeningView extends GetView<TambahRekeningController> {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Form(
+            key: controller.formKey,
             child: Column(
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
                   child: const Text("Nama Rekening"),
                 ),
-
-                // Account balance name
                 TextFormField(
                   decoration: InputDecoration(
                     isDense: true,
@@ -35,7 +33,13 @@ class TambahRekeningView extends GetView<TambahRekeningController> {
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
                   ),
-                  onChanged: (value) => controller.name.value = value,
+                  controller: controller.accountNameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Nama rekening tidak boleh kosong!";
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 16),
@@ -44,42 +48,37 @@ class TambahRekeningView extends GetView<TambahRekeningController> {
                   alignment: Alignment.centerLeft,
                   child: const Text("Saldo Rekening"),
                 ),
-
-                // Account balance amount
-                Obx(
-                  () => TextFormField(
-                    decoration: InputDecoration(
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
-                    keyboardType: TextInputType.number,
-                    // onChanged: (value) => ,
                   ),
+                  keyboardType: TextInputType.number,
+                  controller: controller.accountBalanceController,
                 ),
 
                 const SizedBox(height: 32),
 
                 Align(
                   alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      controller.addRekening(
-                        RekeningModel(
-                          name: controller.name.value,
-                          balance: controller.balance.value,
-                        ),
-                      );
-                      controller.clearForm();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blue),
-                    ),
-                    child: const Text(
-                      "Simpan",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  child: Obx(
+                    () =>
+                        controller.isLoading.value
+                            ? Center(child: CircularProgressIndicator())
+                            : TextButton(
+                              onPressed: () => controller.addRekening(),
+                              style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                  Colors.blue,
+                                ),
+                              ),
+                              child: const Text(
+                                "Simpan",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                   ),
                 ),
               ],

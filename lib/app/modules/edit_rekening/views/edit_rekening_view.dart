@@ -19,15 +19,15 @@ class EditRekeningView extends GetView<EditRekeningController> {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Form(
+            key: controller.formKey,
             child: Column(
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
                   child: const Text("Nama Rekening"),
                 ),
-
-                // Account balance name
                 TextFormField(
+                  controller: controller.accountNameController,
                   decoration: InputDecoration(
                     isDense: true,
                     border: OutlineInputBorder(
@@ -42,9 +42,8 @@ class EditRekeningView extends GetView<EditRekeningController> {
                   alignment: Alignment.centerLeft,
                   child: const Text("Saldo Rekening"),
                 ),
-
-                // Account balance amount
                 TextFormField(
+                  controller: controller.accountBalanceController,
                   decoration: InputDecoration(
                     isDense: true,
                     border: OutlineInputBorder(
@@ -58,7 +57,7 @@ class EditRekeningView extends GetView<EditRekeningController> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () => controller.updateAccount(),
                     style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.blue),
                     ),

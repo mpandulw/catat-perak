@@ -1,21 +1,15 @@
 class RekeningModel {
-  final int? id;
+  final String id;
   final String name;
   final int balance;
 
-  RekeningModel({this.id, required this.name, required this.balance});
+  RekeningModel({required this.id, required this.name, required this.balance});
 
-  factory RekeningModel.fromMap(Map<String, dynamic> map) {
+  factory RekeningModel.fromJson(Map<String, dynamic> json) {
     return RekeningModel(
-      id: map['id'],
-      name: map['name'],
-      balance: map['balance'],
+      id: json['id'],
+      name: json['name'],
+      balance: json['balance'],
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    final data = {"name": name, "balance": balance};
-    if (id != null) data['id'] = id!;
-    return data;
   }
 }
