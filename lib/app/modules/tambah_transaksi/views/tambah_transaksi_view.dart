@@ -34,54 +34,23 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
         ),
         body: TabBarView(
           children: [
+            // Income form
             Center(
               child: Form(
+                key: controller.incomeFormKey,
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: ListView(
                     children: [
-                      // Row(
-                      //   children: [
-                      //     Flexible(
-                      //       flex: 2,
-                      //       child: TextFormField(
-                      //         textAlign: TextAlign.center,
-                      //         initialValue: DateFormat(
-                      //           "dd-MM-yyyy",
-                      //         ).format(DateTime.now()),
-                      //         decoration: InputDecoration(
-                      //           border: OutlineInputBorder(),
-                      //           prefixIcon: Icon(Icons.calendar_month_rounded),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Flexible(
-                      //       flex: 1,
-                      //       child: TextFormField(
-                      //         textAlign: TextAlign.center,
-                      //         initialValue: DateFormat(
-                      //           "HH:mm",
-                      //         ).format(DateTime.now()),
-                      //         decoration: InputDecoration(
-                      //           border: OutlineInputBorder(),
-                      //           prefixIcon: const Icon(
-                      //             Icons.access_time_rounded,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       const SizedBox(height: 15),
 
-                      // Transaction name
+                      // Income transaction name
                       Align(
                         alignment: Alignment.centerLeft,
                         child: const Text("Nama Transaksi"),
                       ),
-
-                      // Transaction name TextFormField
                       TextFormField(
+                        controller: controller.incomeTransactionNameController,
                         decoration: InputDecoration(
                           isDense: true,
                           border: OutlineInputBorder(),
@@ -90,61 +59,85 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
 
                       const SizedBox(height: 15),
 
-                      // Table items
+                      // Table item and price
                       Obx(
                         () => Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Table(
                               border: TableBorder.all(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
+                                  Radius.circular(10),
                                 ),
                               ),
+                              columnWidths: const {
+                                0: FlexColumnWidth(3),
+                                1: FlexColumnWidth(2),
+                                2: FlexColumnWidth(1),
+                              },
                               children: [
                                 TableRow(
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                    ),
                                   ),
-                                  children: [
+                                  children: const [
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8),
                                       child: Text(
                                         "Nama Item",
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8),
                                       child: Text(
-                                        "Jumlah (Rp)",
+                                        "Harga",
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: Text(""),
+                                    ),
                                   ],
                                 ),
-                                ...List.generate(controller.totalColumn.value, (
+                                ...List.generate(controller.itemInputs.length, (
                                   index,
                                 ) {
+                                  final item = controller.itemInputs[index];
                                   return TableRow(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8),
                                         child: TextFormField(
-                                          decoration: InputDecoration(
+                                          controller: item.incomeNameController,
+                                          decoration: const InputDecoration(
+                                            hintText: "Nama barang",
                                             border: InputBorder.none,
-                                            isDense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8),
                                         child: TextFormField(
+                                          controller:
+                                              item.incomePriceController,
                                           keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
+                                            hintText: "Rp",
                                             border: InputBorder.none,
-                                            isDense: true,
                                           ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed:
+                                            () => controller.removeItem(index),
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
                                         ),
                                       ),
                                     ],
@@ -153,73 +146,55 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                // Add new column button
-                                ElevatedButton.icon(
-                                  onPressed:
-                                      () => controller.totalColumn.value++,
-                                  icon: const Icon(Icons.add),
-                                  label: const Text("Tambah Baris"),
-                                ),
-
-                                // Delete the last button
-                                ElevatedButton.icon(
-                                  onPressed: () => controller.delColum(),
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                  label: const Text("Hapus Baris"),
-                                ),
-                              ],
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: ElevatedButton.icon(
+                                onPressed: controller.addItem,
+                                icon: const Icon(Icons.add),
+                                label: const Text("Tambah Item"),
+                              ),
                             ),
                           ],
                         ),
                       ),
 
-                      // Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: const Text("Nominal"),
-                      // ),
-                      // // TextFormField title
-                      // TextFormField(
-                      //   decoration: InputDecoration(
-                      //     isDense: true,
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      // ),
                       const SizedBox(height: 15),
 
-                      DropdownButtonFormField<String>(
-                        value: controller.selectedAccount.value,
-                        items:
-                            controller.accountList.map((String account) {
-                              return DropdownMenuItem<String>(
-                                value: account,
-                                child: Text(account),
-                              );
-                            }).toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            controller.selectedAccount.value = value;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Pilih Akun",
-                          border: OutlineInputBorder(),
+                      // Dropdown accounts
+                      Obx(
+                        () => DropdownButtonFormField<String>(
+                          value:
+                              controller.selectedAccount.value.isNotEmpty
+                                  ? controller.selectedAccount.value
+                                  : null,
+                          items:
+                              controller.rekeningList.map((rekening) {
+                                return DropdownMenuItem<String>(
+                                  value: rekening.name,
+                                  child: Text(rekening.name),
+                                );
+                              }).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              controller.selectedAccount.value = value;
+                            }
+                          },
+                          decoration: const InputDecoration(
+                            labelText: "Pilih Akun",
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
 
                       const SizedBox(height: 15),
 
+                      // Note
                       Align(
                         alignment: Alignment.centerLeft,
                         child: const Text("Note"),
                       ),
-
-                      // Note
                       TextFormField(
+                        controller: controller.incomeNoteController,
                         maxLines: 5,
                         minLines: 3,
                         keyboardType: TextInputType.multiline,
@@ -229,21 +204,11 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
                         ),
                       ),
 
-                      // Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: const Text("Judul"),
-                      // ),
-                      // // TextFormField title
-                      // TextFormField(
-                      //   decoration: InputDecoration(
-                      //     isDense: true,
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      // ),
                       const SizedBox(height: 30),
 
+                      // Button add transaction
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => controller.addTransaction(true),
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.blue),
                         ),
@@ -257,54 +222,24 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
                 ),
               ),
             ),
+
+            // Expense form
             Center(
               child: Form(
+                key: controller.expenseFormKey,
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: ListView(
                     children: [
-                      // Row(
-                      //   children: [
-                      //     Flexible(
-                      //       flex: 2,
-                      //       child: TextFormField(
-                      //         textAlign: TextAlign.center,
-                      //         initialValue: DateFormat(
-                      //           "dd-MM-yyyy",
-                      //         ).format(DateTime.now()),
-                      //         decoration: InputDecoration(
-                      //           border: OutlineInputBorder(),
-                      //           prefixIcon: Icon(Icons.calendar_month_rounded),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Flexible(
-                      //       flex: 1,
-                      //       child: TextFormField(
-                      //         textAlign: TextAlign.center,
-                      //         initialValue: DateFormat(
-                      //           "HH:mm",
-                      //         ).format(DateTime.now()),
-                      //         decoration: InputDecoration(
-                      //           border: OutlineInputBorder(),
-                      //           prefixIcon: const Icon(
-                      //             Icons.access_time_rounded,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       const SizedBox(height: 15),
 
-                      // Transaction name
+                      // Expense transaction name
                       Align(
                         alignment: Alignment.centerLeft,
                         child: const Text("Nama Transaksi"),
                       ),
-
-                      // Transaction name TextFormField
                       TextFormField(
+                        controller: controller.expenseTransactionNameController,
                         decoration: InputDecoration(
                           isDense: true,
                           border: OutlineInputBorder(),
@@ -313,61 +248,82 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
 
                       const SizedBox(height: 15),
 
-                      // Table items
+                      // Expense items
                       Obx(
                         () => Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Table(
                               border: TableBorder.all(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
+                                  Radius.circular(15),
                                 ),
                               ),
+                              columnWidths: const {
+                                0: FlexColumnWidth(3),
+                                1: FlexColumnWidth(2),
+                                2: FlexColumnWidth(1),
+                              },
                               children: [
                                 TableRow(
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                   ),
-                                  children: [
+                                  children: const [
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8),
                                       child: Text(
                                         "Nama Item",
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8),
                                       child: Text(
-                                        "Jumlah (Rp)",
+                                        "Harga",
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: Text(""),
+                                    ),
                                   ],
                                 ),
-                                ...List.generate(controller.totalColumn.value, (
+                                ...List.generate(controller.itemInputs.length, (
                                   index,
                                 ) {
+                                  final item = controller.itemInputs[index];
                                   return TableRow(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8),
                                         child: TextFormField(
-                                          decoration: InputDecoration(
+                                          controller:
+                                              item.expenseNameController,
+                                          decoration: const InputDecoration(
+                                            hintText: "Nama barang",
                                             border: InputBorder.none,
-                                            isDense: true,
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8),
                                         child: TextFormField(
+                                          controller:
+                                              item.expensePriceController,
                                           keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
+                                            hintText: "Rp",
                                             border: InputBorder.none,
-                                            isDense: true,
                                           ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed:
+                                            () => controller.removeItem(index),
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
                                         ),
                                       ),
                                     ],
@@ -375,74 +331,59 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
                                 }),
                               ],
                             ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                // Add new column button
-                                ElevatedButton.icon(
-                                  onPressed:
-                                      () => controller.totalColumn.value++,
-                                  icon: const Icon(Icons.add),
-                                  label: const Text("Tambah Baris"),
-                                ),
 
-                                // Delete the last button
-                                ElevatedButton.icon(
-                                  onPressed: () => controller.delColum(),
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                  label: const Text("Hapus Baris"),
-                                ),
-                              ],
+                            const SizedBox(height: 10),
+
+                            // Add column button
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: ElevatedButton.icon(
+                                onPressed: controller.addItem,
+                                icon: const Icon(Icons.add),
+                                label: const Text("Tambah Item"),
+                              ),
                             ),
                           ],
                         ),
                       ),
 
-                      // Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: const Text("Nominal"),
-                      // ),
-                      // // TextFormField title
-                      // TextFormField(
-                      //   decoration: InputDecoration(
-                      //     isDense: true,
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      // ),
                       const SizedBox(height: 15),
 
-                      DropdownButtonFormField<String>(
-                        value: controller.selectedAccount.value,
-                        items:
-                            controller.accountList.map((String account) {
-                              return DropdownMenuItem<String>(
-                                value: account,
-                                child: Text(account),
-                              );
-                            }).toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            controller.selectedAccount.value = value;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Pilih Akun",
-                          border: OutlineInputBorder(),
+                      // Dropdown accounts widget
+                      Obx(
+                        () => DropdownButtonFormField<String>(
+                          value:
+                              controller.selectedAccount.value.isNotEmpty
+                                  ? controller.selectedAccount.value
+                                  : null,
+                          items:
+                              controller.rekeningList.map((rekening) {
+                                return DropdownMenuItem<String>(
+                                  value: rekening.name,
+                                  child: Text(rekening.name),
+                                );
+                              }).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              controller.selectedAccount.value = value;
+                            }
+                          },
+                          decoration: const InputDecoration(
+                            labelText: "Pilih Akun",
+                            border: OutlineInputBorder(),
+                          ),
                         ),
                       ),
 
                       const SizedBox(height: 15),
 
+                      // Note
                       Align(
                         alignment: Alignment.centerLeft,
                         child: const Text("Note"),
                       ),
-
-                      // Note
                       TextFormField(
+                        controller: controller.expenseNoteController,
                         maxLines: 5,
                         minLines: 3,
                         keyboardType: TextInputType.multiline,
@@ -452,21 +393,10 @@ class TambahTransaksiView extends GetView<TambahTransaksiController> {
                         ),
                       ),
 
-                      // Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: const Text("Judul"),
-                      // ),
-                      // // TextFormField title
-                      // TextFormField(
-                      //   decoration: InputDecoration(
-                      //     isDense: true,
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      // ),
                       const SizedBox(height: 30),
 
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => controller.addTransaction(false),
                         style: ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.blue),
                         ),

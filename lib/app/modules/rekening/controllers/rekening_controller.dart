@@ -13,6 +13,7 @@ class RekeningController extends GetxController {
 
   final formatter = NumberFormat("#.###", "id_ID");
 
+  // Mengambil rekening-rekening dari db
   Future<void> getAccounts() async {
     try {
       isLoading.value = true;
@@ -30,6 +31,7 @@ class RekeningController extends GetxController {
     }
   }
 
+  // Menghapus rekening dari db
   Future<void> delAccount(String id) async {
     try {
       isLoading.value = true;
@@ -43,6 +45,7 @@ class RekeningController extends GetxController {
 
       if (response['success'] == true) {
         await getAccounts();
+        Get.back();
         Get.snackbar(
           "Success",
           response['message'],

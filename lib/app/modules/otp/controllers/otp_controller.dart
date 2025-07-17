@@ -33,7 +33,11 @@ class OtpController extends GetxController {
           builder:
               (context) => AlertDialog(
                 title: const Text("Berhasil Memverifikasi Akunmu"),
-                icon: Image.asset('images/check.gif', width: 200, height: 200),
+                icon: Image.asset(
+                  'assets/images/check.gif',
+                  width: 200,
+                  height: 200,
+                ),
                 content: const Text(
                   "Akun sudah terverifikasi. Kamu sudah bisa login menggunakan akun ini.",
                 ),
@@ -51,7 +55,7 @@ class OtpController extends GetxController {
         Get.snackbar(
           "Error",
           response["message"],
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.redAccent,
         );
       }
     } else if (register == false) {

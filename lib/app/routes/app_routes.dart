@@ -24,6 +24,8 @@ abstract class Routes {
   static const EDIT_TRANSAKSI = _Paths.EDIT_TRANSAKSI;
   static const OTP = _Paths.OTP;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  static const HELP = _Paths.HELP;
+  static const VISUALISASI_TRANSAKSI = _Paths.VISUALISASI_TRANSAKSI;
 }
 
 abstract class _Paths {
@@ -47,4 +49,6 @@ abstract class _Paths {
   static const EDIT_TRANSAKSI = '/edit-transaksi';
   static const OTP = '/otp';
   static const RESET_PASSWORD = '/reset-password';
+  static const HELP = '/help';
+  static const VISUALISASI_TRANSAKSI = '/visualisasi-transaksi';
 }

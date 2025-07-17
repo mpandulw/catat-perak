@@ -14,6 +14,7 @@ class LoginView extends GetView<LoginController> {
       body: SafeArea(
         child: Stack(
           children: [
+            // Page Title
             Padding(
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 50),
               child: Column(
@@ -35,6 +36,7 @@ class LoginView extends GetView<LoginController> {
               ),
             ),
 
+            // Content or Form
             Padding(
               padding: const EdgeInsets.only(top: 150),
               child: Container(
@@ -45,89 +47,109 @@ class LoginView extends GetView<LoginController> {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: controller.formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 27.5),
+                child: Obx(
+                  () =>
+                      controller.isLoading.value
+                          ? Center(child: const CircularProgressIndicator())
+                          : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Form(
+                              key: controller.formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 27.5),
 
-                        // Username
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: const Text("Username"),
-                        ),
-                        const SizedBox(height: 7.5),
-                        TextFormField(
-                          controller: controller.usernameController,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Username tidak boleh kosong!";
-                            }
-                            return null;
-                          },
-                        ),
+                                  // Username
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: const Text("Username"),
+                                  ),
+                                  const SizedBox(height: 7.5),
+                                  TextFormField(
+                                    controller: controller.usernameController,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Username tidak boleh kosong!";
+                                      }
+                                      return null;
+                                    },
+                                  ),
 
-                        const SizedBox(height: 30),
+                                  const SizedBox(height: 30),
 
-                        // Password
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: const Text("Password"),
-                        ),
-                        const SizedBox(height: 7.5),
-                        Obx(
-                          () => TextFormField(
-                            controller: controller.passwordController,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              border: OutlineInputBorder(),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  controller.togglePassword();
-                                },
-                                icon:
-                                    controller.obsecurePassword.value
-                                        ? const Icon(Icons.visibility)
-                                        : const Icon(Icons.visibility_off),
-                              ),
-                            ),
-                            obscureText: controller.obsecurePassword.value,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Password tidak boleh kosong!";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
+                                  // Password
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: const Text("Password"),
+                                  ),
+                                  const SizedBox(height: 7.5),
+                                  Obx(
+                                    () => TextFormField(
+                                      controller: controller.passwordController,
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        border: OutlineInputBorder(),
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            controller.togglePassword();
+                                          },
+                                          icon:
+                                              controller.obsecurePassword.value
+                                                  ? const Icon(Icons.visibility)
+                                                  : const Icon(
+                                                    Icons.visibility_off,
+                                                  ),
+                                        ),
+                                      ),
+                                      obscureText:
+                                          controller.obsecurePassword.value,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return "Password tidak boleh kosong!";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
 
-                        // Forgot password
-                        TextButton(
-                          onPressed: () => Get.toNamed('/forgot-password'),
-                          child: const Text(
-                            'Forgot your password?',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
+                                  // Remember me
+                                  Row(
+                                    children: [
+                                      Obx(
+                                        () => Checkbox(
+                                          value: controller.isRemember.value,
+                                          onChanged: (value) {
+                                            controller.isRemember.value =
+                                                value!;
+                                          },
+                                        ),
+                                      ),
+                                      const Text("Remember Me"),
+                                    ],
+                                  ),
 
-                        const SizedBox(height: 32),
+                                  // Forgot password
+                                  TextButton(
+                                    onPressed:
+                                        () => Get.toNamed('/forgot-password'),
+                                    child: const Text(
+                                      'Forgot your password?',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
 
-                        // Login
-                        SizedBox(
-                          width: double.infinity,
-                          child: Obx(
-                            () =>
-                                controller.isLoading.value
-                                    ? Center(child: CircularProgressIndicator())
-                                    : FilledButton(
+                                  const SizedBox(height: 32),
+
+                                  // Login Button
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: FilledButton(
                                       onPressed: () => controller.login(),
                                       style: ButtonStyle(
                                         backgroundColor: WidgetStatePropertyAll(
@@ -136,74 +158,77 @@ class LoginView extends GetView<LoginController> {
                                       ),
                                       child: const Text("Login"),
                                     ),
+                                  ),
+
+                                  const SizedBox(height: 32),
+
+                                  // Divider
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Divider(
+                                          color: Colors.grey,
+                                          thickness: 1,
+                                          indent: 15,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                        ),
+                                        child: Text("Or"),
+                                      ),
+                                      Expanded(
+                                        child: Divider(
+                                          color: Colors.grey,
+                                          thickness: 1,
+                                          endIndent: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 32),
+
+                                  // Alternative login
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: IconButton(
+                                      icon: CircleAvatar(
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          220,
+                                          220,
+                                          220,
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/google_icon.png',
+                                        ),
+                                      ),
+                                      onPressed:
+                                          () => controller.loginWithGoogle(),
+                                    ),
+                                  ),
+
+                                  // const SizedBox(height: 10),
+
+                                  // Register button
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.toNamed("/daftar");
+                                      },
+                                      child: const Text(
+                                        "Tidak punya akun? daftar disini",
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // Divider
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Colors.grey,
-                                thickness: 1,
-                                indent: 15,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Text("Or"),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Colors.grey,
-                                thickness: 1,
-                                endIndent: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // Alternative login
-                        Align(
-                          alignment: Alignment.center,
-                          child: IconButton(
-                            icon: CircleAvatar(
-                              backgroundColor: const Color.fromARGB(
-                                255,
-                                220,
-                                220,
-                                220,
-                              ),
-                              child: Image.asset(
-                                'assets/images/google_icon.png',
-                              ),
-                            ),
-                            onPressed: () => (),
-                          ),
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // Register button
-                        Align(
-                          alignment: Alignment.center,
-                          child: TextButton(
-                            onPressed: () {
-                              Get.toNamed("/daftar");
-                            },
-                            child: const Text(
-                              "Tidak punya akun? daftar disini",
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ),

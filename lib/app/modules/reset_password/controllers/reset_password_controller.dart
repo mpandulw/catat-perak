@@ -51,7 +51,7 @@ class ResetPasswordController extends GetxController {
         Get.snackbar(
           "Error",
           response["message"],
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.redAccent,
         );
       }
     } else {

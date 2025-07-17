@@ -42,7 +42,7 @@ class DaftarController extends GetxController {
         Get.snackbar(
           'Registrasi Gagal',
           result['message'],
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.redAccent,
         );
       }
     } else {

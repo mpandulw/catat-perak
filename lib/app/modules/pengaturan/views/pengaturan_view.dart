@@ -35,38 +35,21 @@ class PengaturanView extends GetView<PengaturanController> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               ListTile(
-                onTap: () => Get.toNamed('/edit-profil'),
                 leading: CircleAvatar(child: const Icon(Icons.person)),
-                // shape: RoundedRectangleBorder(
-                //   side: BorderSide(),
-                //   borderRadius: BorderRadius.all(Radius.circular(16)),
-                // ),
-                // contentPadding: EdgeInsets.symmetric(
-                //   horizontal: 16,
-                //   vertical: 8,
-                // ),
-                trailing: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                    color: const Color.fromARGB(255, 200, 200, 200),
+                title: Obx(
+                  () => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.username.value,
+                        style: TextStyle(fontSize: 14.5),
+                      ),
+                      Text(
+                        controller.email.value,
+                        style: TextStyle(color: Colors.grey, fontSize: 12.5),
+                      ),
+                    ],
                   ),
-                  height: 32,
-                  width: 32,
-                  padding: EdgeInsets.all(2.5),
-                  child: const Icon(
-                    (Icons.arrow_forward_ios_rounded),
-                    size: 16,
-                  ),
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Username", style: TextStyle(fontSize: 14.5)),
-                    Text(
-                      "email@gmail.com",
-                      style: TextStyle(color: Colors.grey, fontSize: 12.5),
-                    ),
-                  ],
                 ),
               ),
               const SizedBox(height: 16),
@@ -76,20 +59,14 @@ class PengaturanView extends GetView<PengaturanController> {
                 "Pengaturan lainnya",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              // Dark mode switcher
+              // Web view transactions
               ListTile(
-                leading: Icon(Icons.dark_mode_rounded, color: Colors.blueGrey),
-                title: const Text('Dark Mode'),
-                subtitle: const Text('Ubah tampilan aplikasi menjadi gelap'),
-                trailing: Obx(
-                  () => Switch(
-                    value: controller.isDarkMode.value,
-                    onChanged: (_) {
-                      controller.changeTheme();
-                    },
-                    activeTrackColor: Colors.blue,
-                  ),
+                leading: Icon(Icons.bar_chart_sharp, color: Colors.blueGrey),
+                title: const Text('Informasi Transaksi'),
+                subtitle: const Text(
+                  'Visualisasi Transaski di Provinsi Jawa Tengah',
                 ),
+                onTap: () => Get.toNamed('/visualisasi-transaksi'),
               ),
               // Info app
               ListTile(
@@ -131,7 +108,7 @@ class PengaturanView extends GetView<PengaturanController> {
                         ),
                         actions: [
                           TextButton(
-                            onPressed: () => Get.offAllNamed('/login'),
+                            onPressed: () => controller.doLogout(),
                             child: const Text("Adios"),
                           ),
                           TextButton(

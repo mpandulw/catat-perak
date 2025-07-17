@@ -7,6 +7,7 @@ environment:
   sdk: ^3.7.2
 
 dependencies:
+  collection: ^1.19.1
   curved_navigation_bar: ^1.0.6
   fl_chart: ^1.0.0
   flutter:
@@ -16,10 +17,13 @@ dependencies:
   get: ^4.7.2
   google_sign_in: ^6.3.0
   http: ^1.4.0
+  image_picker: ^1.1.2
   intl: ^0.20.2
   mongo_dart: ^0.10.5
   path: ^1.9.1
   shared_preferences: ^2.5.3
+  webview_flutter: ^4.13.0
+  webview_flutter_android: ^4.7.0
 
 dev_dependencies:
   flutter_lints: ^6.0.0

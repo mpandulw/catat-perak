@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/app/data/models/rekening_model.dart';
 import 'package:flutter_application_1/app/data/models/transaksi_model.dart';
-import 'package:flutter_application_1/app/data/models/item_transaksi_model.dart';
+import 'package:flutter_application_1/app/data/services/transaction_service.dart';
 
 import 'package:flutter_application_1/app/modules/home/views/home_view.dart';
 import 'package:flutter_application_1/app/modules/rekap/controllers/rekap_controller.dart';
@@ -10,44 +14,17 @@ import 'package:flutter_application_1/app/modules/riwayat/controllers/riwayat_co
 import 'package:flutter_application_1/app/modules/riwayat/views/riwayat_view.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
-  // Dummy Data
-  final List<Transaction> dummyTransactions = [
-    Transaction(
-      title: "Transaction 1",
-      date: DateTime.now().subtract(Duration(days: 1)),
-      account: "BRI",
-      isIncome: true,
-      items: [
-        TransactionItem(item: "Gaji", amount: 10000.0),
-        TransactionItem(item: "Bonus", amount: 25000.0),
-      ],
-      note: "Catatan",
-    ),
-    Transaction(
-      title: "Transaction 2",
-      date: DateTime.now().subtract(Duration(days: 3)),
-      account: "BRI",
-      isIncome: false,
-      items: [
-        TransactionItem(item: "Bakwan Jagung", amount: 10000.0),
-        TransactionItem(item: "Bebek Goreng H.Slame(Asli)", amount: 5000.0),
-      ],
-      note: "Catatan",
-    ),
-    Transaction(
-      title: "Transaction 2",
-      date: DateTime.now().subtract(Duration(days: 3)),
-      account: "BRI",
-      isIncome: false,
-      items: [
-        TransactionItem(item: "Bakwan Jagung", amount: 10000.0),
-        TransactionItem(item: "Bebek Goreng H.Slame(Asli)", amount: 5000.0),
-      ],
-      note: "Catatan",
-    ),
-  ];
+  var currentIndexMarquee = 0.obs;
+  // late Timer _timer;
+  final isLoading = false.obs;
+
+  final formatter = NumberFormat("#,###", "id_ID");
+
+  final rekeningList = <RekeningModel>[].obs;
 
   // Pages for bottom navigation bar
   final pages = [
@@ -59,19 +36,79 @@ class HomeController extends GetxController {
   // Index for navigation over pages
   final currentIndex = 0.obs;
 
-  final transactions = <Transaction>[].obs;
+  final transactionsList = <Transaction>[].obs;
 
   // Total saldo
   final totalBalance = 0.obs;
 
+  final TransactionService _transactionService = TransactionService();
+
   @override
   void onInit() {
     super.onInit();
-    loadDummyData();
+    getTransaction();
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      if (currentIndexMarquee.value < rekeningList.length - 1) {
+        currentIndexMarquee.value++;
+      } else {
+        currentIndexMarquee.value = 0;
+      }
+    });
+
+    final rekeningController = Get.put(RekeningController());
+    ever(rekeningController.rekeningList, (list) {
+      rekeningList.assignAll(list);
+    });
   }
 
-  void loadDummyData() {
-    transactions.assignAll(dummyTransactions);
+  Future<void> getTransaction() async {
+    try {
+      isLoading.value = true;
+
+      final prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token')!;
+
+      final response = await _transactionService.getTransaction(token);
+      transactionsList.value =
+          response
+              .map((transaction) => Transaction.fromJson(transaction))
+              .toList();
+
+      isLoading.value = false;
+    } catch (e) {
+      Get.snackbar("Error", "Error : $e");
+    }
+  }
+
+  Future<void> delTransaction(String id) async {
+    try {
+      isLoading.value = true;
+
+      final prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      final response = await _transactionService.delTransaction(token!, id);
+      await getTransaction();
+
+      isLoading.value = false;
+
+      if (response['success'] == true) {
+        Get.back();
+        Get.snackbar(
+          "Success",
+          response['message'],
+          backgroundColor: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          "Failed",
+          response['message'],
+          backgroundColor: Colors.redAccent,
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Failed", "Error : $e");
+    }
   }
 
   void changeIndex(int index) {

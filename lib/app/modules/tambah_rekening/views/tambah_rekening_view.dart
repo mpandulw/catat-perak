@@ -57,6 +57,12 @@ class TambahRekeningView extends GetView<TambahRekeningController> {
                   ),
                   keyboardType: TextInputType.number,
                   controller: controller.accountBalanceController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Nama rekening tidak boleh kosong!";
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 32),

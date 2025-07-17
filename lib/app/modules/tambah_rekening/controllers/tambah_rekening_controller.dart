@@ -35,12 +35,12 @@ class TambahRekeningController extends GetxController {
       isLoading.value = false;
 
       if (response['success'] == true) {
+        Get.back();
         Get.snackbar(
           'Success',
           'Berhasil menambahkan rekening baru!',
           backgroundColor: Colors.white,
         );
-        Get.offAllNamed('/rekening');
       } else if (response["success"] == false) {
         Get.snackbar(
           'Failed',

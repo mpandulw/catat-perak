@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../controllers/scan_controller.dart';
 
@@ -13,17 +14,36 @@ class ScanView extends GetView<ScanController> {
       body: Center(
         child: Column(
           children: [
-            Container(
-              width: 150,
-              height: 270,
-              decoration: BoxDecoration(border: Border.all()),
+            Obx(
+              () => Container(
+                width: 150,
+                height: 270,
+                decoration: BoxDecoration(border: Border.all()),
+                child:
+                    controller.selectedImage.value != null
+                        ? Image.file(
+                          controller.selectedImage.value!,
+                          fit: BoxFit.fill,
+                        )
+                        : Center(child: const Text('No Image')),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(onPressed: () {}, child: const Text("Camera")),
-                TextButton(onPressed: () {}, child: const Text("Gallery")),
+                TextButton(
+                  onPressed: () => controller.pickImage(ImageSource.camera),
+                  child: const Text("Camera"),
+                ),
+                TextButton(
+                  onPressed: () => controller.pickImage(ImageSource.gallery),
+                  child: const Text("Gallery"),
+                ),
               ],
+            ),
+            TextButton(
+              onPressed: () => controller.receiptScan(),
+              child: const Text("Cihuy"),
             ),
           ],
         ),

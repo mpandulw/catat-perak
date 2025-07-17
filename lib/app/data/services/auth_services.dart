@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
-  final url = "http://localhost:5000";
+  final url = "https://catatperak.my.id/";
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     try {

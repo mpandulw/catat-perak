@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AccountServices {
-  final url = "http://localhost:5000";
+  final url = "https://catatperak.my.id/";
 
   Future<Map<String, dynamic>> addAccount(
     String name,

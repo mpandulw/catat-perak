@@ -10,7 +10,6 @@ class RekeningView extends GetView<RekeningController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Appbar
       appBar: AppBar(
         title: const Text('Rekening'),
         centerTitle: true,
@@ -27,7 +26,24 @@ class RekeningView extends GetView<RekeningController> {
             }
 
             if (controller.rekeningList.isEmpty) {
-              return const Text("Tidak ada rekening");
+              return RefreshIndicator(
+                onRefresh: () => controller.getAccounts(),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/wallet.png',
+                          height: 100,
+                          width: 100,
+                        ),
+                        const Text("Belum ada rekening"),
+                      ],
+                    ),
+                  ),
+                ),
+              );
             }
 
             return RefreshIndicator(
@@ -49,7 +65,22 @@ class RekeningView extends GetView<RekeningController> {
                           ),
                       title: Text(rekening.name),
                       trailing: IconButton(
-                        onPressed: () => controller.delAccount(rekening.id),
+                        onPressed: () {
+                          Get.defaultDialog(
+                            title: "Delete Account",
+                            middleText:
+                                "Do you really want to delete this account?",
+                            textConfirm: "Yes",
+                            textCancel: "No",
+                            confirmTextColor: Colors.white,
+                            onConfirm: () async {
+                              await controller.delAccount(rekening.id);
+                            },
+                            onCancel: () {
+                              Get.back(); // Only needed if you want to force-close
+                            },
+                          );
+                        },
                         icon: const Icon(Icons.delete, color: Colors.red),
                       ),
                       subtitle: Text(

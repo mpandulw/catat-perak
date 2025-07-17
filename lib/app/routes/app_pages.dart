@@ -4,8 +4,6 @@ import '../modules/daftar/bindings/daftar_binding.dart';
 import '../modules/daftar/views/daftar_view.dart';
 import '../modules/detail_rekening/bindings/detail_rekening_binding.dart';
 import '../modules/detail_rekening/views/detail_rekening_view.dart';
-import '../modules/edit-profil/bindings/edit_profil_binding.dart';
-import '../modules/edit-profil/views/edit_profil_view.dart';
 import '../modules/edit_rekening/bindings/edit_rekening_binding.dart';
 import '../modules/edit_rekening/views/edit_rekening_view.dart';
 import '../modules/edit_transaksi/bindings/edit_transaksi_binding.dart';
@@ -36,6 +34,8 @@ import '../modules/tambah_rekening/bindings/tambah_rekening_binding.dart';
 import '../modules/tambah_rekening/views/tambah_rekening_view.dart';
 import '../modules/tambah_transaksi/bindings/tambah_transaksi_binding.dart';
 import '../modules/tambah_transaksi/views/tambah_transaksi_view.dart';
+import '../modules/visualisasi_transaksi/bindings/visualisasi_transaksi_binding.dart';
+import '../modules/visualisasi_transaksi/views/visualisasi_transaksi_view.dart';
 
 part 'app_routes.dart';
 
@@ -99,11 +99,6 @@ class AppPages {
       binding: DetailRekeningBinding(),
     ),
     GetPage(
-      name: _Paths.EDIT_PROFIL,
-      page: () => const EditProfilView(),
-      binding: EditProfilBinding(),
-    ),
-    GetPage(
       name: _Paths.INFO_APP,
       page: () => const InfoAppView(),
       binding: InfoAppBinding(),
@@ -142,6 +137,11 @@ class AppPages {
       name: _Paths.RESET_PASSWORD,
       page: () => const ResetPasswordView(),
       binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.VISUALISASI_TRANSAKSI,
+      page: () => const VisualisasiTransaksiView(),
+      binding: VisualisasiTransaksiBinding(),
     ),
   ];
 }
